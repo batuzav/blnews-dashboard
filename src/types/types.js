@@ -17,4 +17,5 @@ export const types = {
   authStartTokenRenew: "[auth] start token renew",
   authLogout: "[auth] Logout",
   authError: "[auth] Auth Errpr",
+  authRestartForm: "[auth] Restart Form",
 };

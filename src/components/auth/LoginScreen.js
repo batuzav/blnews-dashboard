@@ -20,7 +20,9 @@ export const LoginScreen = () => {
     email: "",
     password: "",
   };
-  const { authLoading, authError } = useSelector((state) => state.auth);
+  const { authLoading, authError, checking } = useSelector(
+    (state) => state.auth
+  );
   const [formValues, handleInputChange, reset] = useForm(initialForm);
   const { email, password } = formValues;
   const dispatch = useDispatch();
@@ -80,12 +82,20 @@ export const LoginScreen = () => {
               </form>
               <SnackbarCustom
                 open={authError}
-                duration={6000}
+                duration={4000}
                 handleClose={handleClose}
                 type="error"
               >
                 {" "}
                 Error al iniciar sesión
+              </SnackbarCustom>
+              <SnackbarCustom
+                open={checking}
+                duration={4000}
+                handleClose={handleClose}
+              >
+                {" "}
+                Sesión iniciada ❤️
               </SnackbarCustom>
             </div>
           </div>
