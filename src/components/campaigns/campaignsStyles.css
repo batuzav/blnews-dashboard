@@ -129,3 +129,13 @@
   z-index: 9999;
   border-color: #ff7f00 !important;
 }
+
+.fab-danger {
+  border-radius: 100%;
+  bottom: 85px;
+  font-size: 16px;
+  position: fixed;
+  right: 30px;
+  padding: 12px;
+  z-index: 9999;
+}

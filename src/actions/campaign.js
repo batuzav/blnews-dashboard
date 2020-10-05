@@ -23,3 +23,10 @@ export const campaignGetAllCampaigns = (campaigns) => ({
 // export const getAllCampaigns = () => {
 //   };
 // };
+
+export const campaignUpdated = (campaign) => ({
+  type: types.campaignUpdateCampaign,
+  payload: campaign,
+});
+
+export const campaignDelated = () => ({ type: types.campaignDelateCampaign });

@@ -6,6 +6,7 @@ const end = now.clone().add(1, "hours");
 const initialState = {
   campaigns: [
     {
+      id: 1,
       title: "Batuza",
       subtitle: "prueba",
       country: [{ value: "MEX", label: "México" }],
@@ -35,6 +36,21 @@ export const campaignReducer = (state = initialState, action) => {
     case types.campaignRemoveActive:
       return {
         ...state,
+        activeCampaign: null,
+      };
+    case types.campaignUpdateCampaign:
+      return {
+        ...state,
+        campaigns: state.campaigns.map((e) =>
+          e.id === action.payload.id ? action.payload : e
+        ),
+      };
+    case types.campaignDelateCampaign:
+      return {
+        ...state,
+        campaigns: state.campaigns.filter(
+          (e) => e.id !== state.activeCampaign.id
+        ),
         activeCampaign: null,
       };
     default:

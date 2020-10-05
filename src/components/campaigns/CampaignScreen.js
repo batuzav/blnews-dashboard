@@ -10,8 +10,12 @@ import { CampaignEvent } from "./CampaignEvent";
 import { CampaignModal } from "./CampaignModal";
 import { useDispatch, useSelector } from "react-redux";
 import { uiOpenModal } from "../../actions/ui";
-import { campaignSetActive } from "../../actions/campaign";
+import {
+  campaignRemoveActive,
+  campaignSetActive,
+} from "../../actions/campaign";
 import { AddNewFab } from "../ui/AddNewFab";
+import { DelatedCampaignFab } from "../ui/DelatedCampaignFab";
 moment.locale("es");
 const localizer = momentLocalizer(moment);
 
@@ -19,7 +23,7 @@ const localizer = momentLocalizer(moment);
 
 export const CampaignScreen = () => {
   const dispatch = useDispatch();
-  const { campaigns } = useSelector((state) => state.campaign);
+  const { campaigns, activeCampaign } = useSelector((state) => state.campaign);
   const [lastView, setLastView] = useState(
     localStorage.getItem("lastView") || "month"
   );
@@ -44,6 +48,9 @@ export const CampaignScreen = () => {
     setLastView(e);
     localStorage.setItem("lastView", e);
   };
+  const onSelectSlot = (e) => {
+    dispatch(campaignRemoveActive());
+  };
   return (
     <>
       <Navbar>
@@ -62,11 +69,15 @@ export const CampaignScreen = () => {
             }}
             onDoubleClickEvent={onDoubleClick}
             onSelectEvent={onSelect}
+            onSelectSlot={onSelectSlot}
+            selectable={true}
             onView={onViewChange}
             view={lastView}
           />
         </div>
         <AddNewFab />
+        {activeCampaign !== null ? <DelatedCampaignFab /> : false}
+
         <CampaignModal />
       </Navbar>
     </>

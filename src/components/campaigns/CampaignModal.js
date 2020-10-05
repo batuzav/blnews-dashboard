@@ -7,7 +7,11 @@ import Select from "react-select";
 import Swal from "sweetalert2";
 import { useSelector, useDispatch } from "react-redux";
 import { uiCloseModal } from "../../actions/ui";
-import { campaignAddNew, campaignRemoveActive } from "../../actions/campaign";
+import {
+  campaignAddNew,
+  campaignRemoveActive,
+  campaignUpdated,
+} from "../../actions/campaign";
 
 const customStyles = {
   content: {
@@ -34,7 +38,7 @@ const initForm = {
 };
 export const CountriesOptions = [
   { value: "MEX", label: "México" },
-  { value: "PER", label: "Peru" },
+  { value: "PER", label: "Perú" },
   { value: "SAL", label: "El Salvador" },
   { value: "PAN", label: "Panamá" },
   { value: "BOL", label: "Bolivia" },
@@ -45,8 +49,6 @@ export const CampaignModal = () => {
   const { modalOpen } = useSelector((state) => state.ui);
   const { activeCampaign } = useSelector((state) => state.campaign);
   const dispatch = useDispatch();
-  const [dateStart, setDateStart] = useState(now.toDate());
-  const [dateEnd, setDateEnd] = useState(end.toDate());
   const [showBodyImgInput, setShowBodyImgInput] = useState(false);
   const [validateForm, setValidateForm] = useState({
     titleValid: true,
@@ -60,6 +62,8 @@ export const CampaignModal = () => {
     if (activeCampaign) {
       console.log("activeCampaign", activeCampaign);
       setFormValues(activeCampaign);
+    } else {
+      setFormValues(initForm);
     }
   }, [activeCampaign, setFormValues]);
   const closeModal = () => {
@@ -69,14 +73,12 @@ export const CampaignModal = () => {
     setFormValues(initForm);
   };
   const handleStartDateChange = (e) => {
-    setDateStart(e);
     setFormValues({
       ...formValues,
       startDate: e,
     });
   };
   const handleEndDateChange = (e) => {
-    setDateEnd(e);
     setFormValues({
       ...formValues,
       endDate: e,
@@ -126,12 +128,18 @@ export const CampaignModal = () => {
     if (formValues.country.length === 0) {
       return Swal.fire("Error", "No has seleccionado ningún país =(", "error");
     }
-    dispatch(
-      campaignAddNew({
-        ...formValues,
-        id: new Date().getTime(),
-      })
-    );
+
+    if (activeCampaign) {
+      dispatch(campaignUpdated(formValues));
+    } else {
+      dispatch(
+        campaignAddNew({
+          ...formValues,
+          id: new Date().getTime(),
+        })
+      );
+    }
+
     closeModal();
   };
 
@@ -287,7 +295,7 @@ export const CampaignModal = () => {
           style={{ marginBottom: 15 }}
         >
           <i className="far fa-save"></i>
-          <span> Guardar</span>
+          <span> {activeCampaign !== null ? "Editar" : "Guardar"}</span>
         </button>
       </form>
     </Modal>
