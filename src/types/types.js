@@ -15,5 +15,6 @@ export const types = {
   authLogin: "[auth] Login",
   authStartRegister: "[auth] start register",
   authStartTokenRenew: "[auth] start token renew",
-  authLogout: "[auth] Logoiut",
+  authLogout: "[auth] Logout",
+  authError: "[auth] Auth Errpr",
 };

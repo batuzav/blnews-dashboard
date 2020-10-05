@@ -1,10 +1,11 @@
 import React from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { startLogin } from "../../actions/auth";
+import { authLogout, startLogin } from "../../actions/auth";
 import { useForm } from "../../services/useForm";
 import { CircularProgress } from "@material-ui/core";
 import { createMuiTheme, ThemeProvider } from "@material-ui/core/styles";
 import "./login.css";
+import { SnackbarCustom } from "../custom/Alerts";
 
 const theme = createMuiTheme({
   palette: {
@@ -19,7 +20,7 @@ export const LoginScreen = () => {
     email: "",
     password: "",
   };
-  const { authLoading } = useSelector((state) => state.auth);
+  const { authLoading, authError } = useSelector((state) => state.auth);
   const [formValues, handleInputChange, reset] = useForm(initialForm);
   const { email, password } = formValues;
   const dispatch = useDispatch();
@@ -27,6 +28,14 @@ export const LoginScreen = () => {
     e.preventDefault();
     dispatch(startLogin(formValues));
     //
+  };
+
+  const handleClose = (event, reason) => {
+    if (reason === "clickaway") {
+      return;
+    }
+
+    dispatch(authLogout());
   };
 
   return (
@@ -69,6 +78,15 @@ export const LoginScreen = () => {
                   )}
                 </div>
               </form>
+              <SnackbarCustom
+                open={authError}
+                duration={6000}
+                handleClose={handleClose}
+                type="error"
+              >
+                {" "}
+                Error al iniciar sesión
+              </SnackbarCustom>
             </div>
           </div>
 

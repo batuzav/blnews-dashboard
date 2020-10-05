@@ -5,6 +5,7 @@ const initialState = {
   uid: null,
   name: null,
   authLoading: false,
+  authError: false,
 };
 
 export const authReducer = (state = initialState, action) => {
@@ -14,6 +15,20 @@ export const authReducer = (state = initialState, action) => {
         ...state,
         authLoading: true,
       };
+    case types.authCheckingFinish:
+      return {
+        ...state,
+        authLoading: false,
+      };
+    case types.authError:
+      return {
+        ...state,
+        authLoading: false,
+        authError: true,
+      };
+
+    case types.authLogout:
+      return initialState;
 
     default:
       return state;
