@@ -1,5 +1,5 @@
 import { apiCall } from "../services/api";
-import { loginQuery } from "../services/auth";
+import { loginQuery, checkAuthQuery } from "../services/auth";
 import { types } from "../types/types";
 
 export const authChecking = () => ({
@@ -26,6 +26,10 @@ export const reStartFormAuth = () => ({
   type: types.authRestartForm,
 });
 
+export const authCheckingToken = () => ({
+  type: types.authCheckingToken,
+});
+
 export const startLogin = ({ email, password }) => {
   return async (dispatch) => {
     dispatch(authChecking());
@@ -42,6 +46,32 @@ export const startLogin = ({ email, password }) => {
         dispatch(authError());
       }
     } catch (e) {
+      dispatch(authError());
+      console.log("e: >>>", e);
+    }
+  };
+};
+
+export const authTokenChecking = () => {
+  const token = localStorage.getItem("token") || "";
+  return async (dispatch) => {
+    dispatch(authCheckingToken());
+    try {
+      const resp = await apiCall(checkAuthQuery(), token);
+      if (resp.data.data.checkLogin) {
+        const { isAuth, user } = resp.data.data.checkLogin;
+        if (isAuth) {
+          console.log('HOLA', user)
+          dispatch(login(user));
+        } else {
+          localStorage.removeItem("token");
+          localStorage.removeItem("token-init-date");
+          dispatch(authError());
+        }
+      }
+    } catch (e) {
+      localStorage.removeItem("token");
+      localStorage.removeItem("token-init-date");
       dispatch(authError());
       console.log("e: >>>", e);
     }

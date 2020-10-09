@@ -7,6 +7,8 @@ const initialState = {
   authLoading: false,
   authError: false,
   isAuth: false,
+  typeUser: "",
+  checkingToken: false,
 };
 
 export const authReducer = (state = initialState, action) => {
@@ -29,17 +31,23 @@ export const authReducer = (state = initialState, action) => {
       };
     case types.authLogin:
       return {
-        ...initialState,
+        ...state,
         checking: true,
         isAuth: true,
         uid: action.payload._id,
         name: action.payload.firstName,
+        typeUser: action.payload.typeUser,
       };
     case types.authRestartForm:
       return {
         ...state,
         checking: false,
         authError: false,
+      };
+    case types.authCheckingToken:
+      return {
+        ...state,
+        checkingToken: true,
       };
 
     case types.authLogout:
