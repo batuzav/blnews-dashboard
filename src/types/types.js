@@ -19,4 +19,6 @@ export const types = {
   authError: "[auth] Auth Errpr",
   authRestartForm: "[auth] Restart Form",
   authCheckingToken: "[auth] checking token backend",
+
+  pageChange: "[page] change paes",
 };

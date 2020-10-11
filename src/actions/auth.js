@@ -29,6 +29,10 @@ export const reStartFormAuth = () => ({
 export const authCheckingToken = () => ({
   type: types.authCheckingToken,
 });
+export const changePage = (page) => ({
+  type: types.pageChange,
+  payload: page,
+});
 
 export const startLogin = ({ email, password }) => {
   return async (dispatch) => {
@@ -41,6 +45,7 @@ export const startLogin = ({ email, password }) => {
         const { token, user } = resp.data.data.login;
         localStorage.setItem("token", token);
         localStorage.setItem("token-init-date", new Date().getTime());
+        localStorage.setItem("page", "home");
         dispatch(login(user));
       } else {
         dispatch(authError());

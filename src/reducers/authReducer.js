@@ -9,6 +9,7 @@ const initialState = {
   isAuth: false,
   typeUser: "",
   checkingToken: false,
+  actualPage: "home"
 };
 
 export const authReducer = (state = initialState, action) => {
@@ -26,12 +27,14 @@ export const authReducer = (state = initialState, action) => {
     case types.authError:
       return {
         ...state,
+        checkingToken: false,
         authLoading: false,
         authError: true,
       };
     case types.authLogin:
       return {
         ...state,
+        checkingToken:false,
         checking: true,
         isAuth: true,
         uid: action.payload._id,
@@ -49,6 +52,11 @@ export const authReducer = (state = initialState, action) => {
         ...state,
         checkingToken: true,
       };
+    case types.pageChange: 
+    return{
+      ...state,
+      actualPage: action.payload,
+    }
 
     case types.authLogout:
       return initialState;

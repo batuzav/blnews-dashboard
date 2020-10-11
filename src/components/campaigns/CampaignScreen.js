@@ -16,6 +16,7 @@ import {
 } from "../../actions/campaign";
 import { AddNewFab } from "../ui/AddNewFab";
 import { DelatedCampaignFab } from "../ui/DelatedCampaignFab";
+import { changePage } from "../../actions/auth";
 moment.locale("es");
 const localizer = momentLocalizer(moment);
 
@@ -27,6 +28,7 @@ export const CampaignScreen = () => {
   const [lastView, setLastView] = useState(
     localStorage.getItem("lastView") || "month"
   );
+  
   const eventStyleGetter = (event, start, end, isSelected) => {
     // console.log(event, start, end, isSelected);
     const style = {
@@ -52,7 +54,7 @@ export const CampaignScreen = () => {
     dispatch(campaignRemoveActive());
   };
   return (
-    <>
+    <>  
       <Navbar>
         <div className="calendar-screen">
           <h1>CAmpañas</h1>

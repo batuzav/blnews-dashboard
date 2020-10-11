@@ -12,6 +12,7 @@ import {
   campaignRemoveActive,
   campaignUpdated,
 } from "../../actions/campaign";
+import { CategoriesOptions, CountriesOptions } from "../../services/selectConstants";
 
 const customStyles = {
   content: {
@@ -35,15 +36,9 @@ const initForm = {
   startDate: now.toDate(),
   endDate: end.toDate(),
   userCreate: { name: "Pedro" },
+  category: [],
 };
-export const CountriesOptions = [
-  { value: "MEX", label: "México" },
-  { value: "PER", label: "Perú" },
-  { value: "SAL", label: "El Salvador" },
-  { value: "PAN", label: "Panamá" },
-  { value: "BOL", label: "Bolivia" },
-  { value: "USA", label: "United States" },
-];
+
 Modal.setAppElement("#root");
 export const CampaignModal = () => {
   const { modalOpen } = useSelector((state) => state.ui);
@@ -95,6 +90,20 @@ export const CampaignModal = () => {
       ...formValues,
       country: value,
     });
+  };
+  const handleSelectCatChange = (e) => {
+    let value = [];
+    e !== null
+      ? e.map((event) => {
+        console.log('event', )
+          value.push(event);
+        })
+      : (value = []);
+    setFormValues({
+      ...formValues,
+      category: value,
+    });
+    console.log('formValues', formValues.category)
   };
   const handleCheckImgBodyChange = (e) => {
     setShowBodyImgInput(!showBodyImgInput);
@@ -230,6 +239,23 @@ export const CampaignModal = () => {
 
           <small className="form-text text-muted">
             Países donde se verá la campaña
+          </small>
+        </div>
+        <div className="form-group">
+          <label>Categoria</label>
+          <Select
+            isMulti
+            name="category"
+            value={formValues.category}
+            options={CategoriesOptions}
+            placeholder="Seleccionar Categoria"
+            className="basic-multi-select"
+            classNamePrefix="select"
+            onChange={handleSelectCatChange}
+          />
+
+          <small className="form-text text-muted">
+            Categoria a la que pertenecerá la campaña
           </small>
         </div>
         <div className="form-group ">
