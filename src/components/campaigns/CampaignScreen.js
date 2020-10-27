@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Calendar, momentLocalizer } from "react-big-calendar";
 import { messages } from "../helpers/calendar-messages-es";
 import moment from "moment";
@@ -13,6 +13,7 @@ import { uiOpenModal } from "../../actions/ui";
 import {
   campaignRemoveActive,
   campaignSetActive,
+  getAllCampaigns,
 } from "../../actions/campaign";
 import { AddNewFab } from "../ui/AddNewFab";
 import { DelatedCampaignFab } from "../ui/DelatedCampaignFab";
@@ -28,6 +29,11 @@ export const CampaignScreen = () => {
   const [lastView, setLastView] = useState(
     localStorage.getItem("lastView") || "month"
   );
+
+  useEffect(() => {
+    dispatch(getAllCampaigns());
+    
+  }, [dispatch])
   
   const eventStyleGetter = (event, start, end, isSelected) => {
     // console.log(event, start, end, isSelected);

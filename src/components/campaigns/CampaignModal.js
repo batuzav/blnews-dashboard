@@ -11,8 +11,12 @@ import {
   campaignAddNew,
   campaignRemoveActive,
   campaignUpdated,
+  uploadImageToImgur,
 } from "../../actions/campaign";
+import { Avatar } from "@material-ui/core";
+import { makeStyles } from '@material-ui/core/styles';
 import { CategoriesOptions, CountriesOptions } from "../../services/selectConstants";
+import { toBase64 } from "../../services/functions";
 
 const customStyles = {
   content: {
@@ -24,6 +28,26 @@ const customStyles = {
     transform: "translate(-50%, -50%)",
   },
 };
+const useStyles = makeStyles((theme) => ({
+  root: {
+    display: 'flex',
+    '& > *': {
+      margin: theme.spacing(1),
+    },
+  },
+  small: {
+    width: theme.spacing(3),
+    height: theme.spacing(3),
+  },
+  large: {
+    width: theme.spacing(18),
+    height: theme.spacing(18),
+  },
+  square: {
+    width: theme.spacing(18),
+    height: theme.spacing(18),
+  },
+}));
 const now = moment().minutes(0).seconds(0).add(1, "hours");
 const end = now.clone().add(1, "hours");
 const initForm = {
@@ -53,6 +77,7 @@ export const CampaignModal = () => {
   });
   const [formValues, setFormValues] = useState(initForm);
   const { startDate, endDate } = formValues;
+  const classes = useStyles();
   useEffect(() => {
     if (activeCampaign) {
       console.log("activeCampaign", activeCampaign);
@@ -114,7 +139,7 @@ export const CampaignModal = () => {
       [target.name]: target.value,
     });
   };
-  const handleSumitForm = (e) => {
+  const handleSumitForm = async (e) => {
     e.preventDefault();
     const momentStart = moment(startDate);
     const momentEnd = moment(endDate);
@@ -139,7 +164,11 @@ export const CampaignModal = () => {
     }
 
     if (activeCampaign) {
-      dispatch(campaignUpdated(formValues));
+      // dispatch(campaignUpdated(formValues));
+      console.log('formValues.img', formValues.img);
+      const imageToUpload = document.querySelector("#imageToUpload").files[0];
+      console.log('imageTpUpload', imageToUpload)
+      dispatch(uploadImageToImgur(imageToUpload));
     } else {
       dispatch(
         campaignAddNew({
@@ -260,12 +289,14 @@ export const CampaignModal = () => {
         </div>
         <div className="form-group ">
           <label>Imagen principal</label>
+          <Avatar alt="imagen Principal" className={classes.square} src={activeCampaign!==null ? `${activeCampaign.usedImg}` : false}/>
           <input
             type="file"
             className="form-control"
             value={formValues.img}
             autoComplete="off"
             name="img"
+            id="imageToUpload"
             onChange={handleChangeInput}
           />
           <small id="emailHelp" className="form-text text-muted">

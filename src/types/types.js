@@ -8,6 +8,11 @@ export const types = {
   campaignGetAllCampaigns: "[campaign] Get All Campaigns",
   campaignUpdateCampaign: "[campaign] Updated campaign",
   campaignDelateCampaign: "[campaign] delate campaign",
+  campaignsGetStart: "[campaign] get campaign start",
+  campaignServerError: "[campaign] server error",
+  campaignUploadingImage: "[campaign] upload image to imgur",
+  campaignUploadImg: "[campaign] updated image",
+  campaignImgUploadError: "[campign] error uploadin image to imgur",
 
   authChecking: "[auth] chaeking state",
   authCheckingFinish: "[auth] chaeking finish state",

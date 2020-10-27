@@ -3,7 +3,6 @@ import PropTypes from "prop-types";
 import "./navbar.css";
 import { useDispatch, useSelector } from "react-redux";
 import { changePage } from "../../actions/auth";
-import { history } from "../../routers/AppRouter";
 import {Link} from 'react-router-dom';
 
 export const Navbar = ({ children }) => {
@@ -12,7 +11,6 @@ export const Navbar = ({ children }) => {
 
   const handleNavBar = (goTo) =>{
     dispatch(changePage(goTo))
-    history.push(`/${goTo}`);
 
   }
   return (
