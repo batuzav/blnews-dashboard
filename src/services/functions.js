@@ -37,14 +37,17 @@ export const switchRefactoredCategory = (value) => {
     }
 }
 
-export const refactorCampaign = (campaigns, type) => {
-    let refactoredCountries = [];
-    let refactoredCategories = [];
-    //1 = get; 2 = post; 
+export const refactorCampaign = (campaigns, type, imgToUpdating = "https://i.imgur.com/YYOjj4r.png", imgBodyToUpdating = "https://i.imgur.com/YYOjj4r.png") => {
+    
+    //1 = get; 2 = post;
+    
     if(type === 1){
       campaigns.map((campaign)=>{
+        console.log('campaigns', campaigns) 
+        let refactoredCountries = [];
+        let refactoredCategories = [];
         campaign.country.map((value)=>{
-          refactoredCountries = [... refactoredCountries, switchRefactoredCounty(value)];
+          refactoredCountries = [...refactoredCountries, switchRefactoredCounty(value)];
         });
         campaign.category.map((value)=>{
           refactoredCategories = [...refactoredCategories, switchRefactoredCategory(value)];
@@ -53,12 +56,34 @@ export const refactorCampaign = (campaigns, type) => {
         campaign.endDate = new Date(campaign.endDate);
         campaign.usedImg = campaign.img;
         campaign.img = "";
-        campaign.usedimageBody = campaign.imageBod;
+        campaign.usedimageBody = campaign.imageBody;        ;
         campaign.imageBody = "";
-          campaign.country = refactoredCountries; 
+        campaign.country = refactoredCountries; 
         campaign.category = refactoredCategories; 
       });
     }
-    console.log('refactoredCountries', refactoredCountries)
+    if(type === 2) {
+      console.log('campaigns', campaigns)
+      let refactoredCountries = [];
+      let refactoredCategories = [];
+     
+      campaigns.country.map((country)=>{
+        const temp = `"${country.value}"`;
+        refactoredCountries = [...refactoredCountries, temp];
+      });
+      campaigns.category.map((category)=> {
+        const temp = `"${category.value}"`;
+        refactoredCategories = [...refactoredCategories, temp];
+      });
+      campaigns.refactoredCountries = refactoredCountries;
+      campaigns.refactoredCategories = refactoredCategories;
+      campaigns.endDateString = campaigns.endDate.toISOString();
+      campaigns.startDateString = campaigns.startDate.toISOString();
+      campaigns.usedImg =  imgToUpdating;
+      campaigns.usedimageBody = imgBodyToUpdating;
+      console.log('campaign', campaigns);
+      
+    }
+    
     return campaigns;
   }

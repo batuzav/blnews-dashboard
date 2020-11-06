@@ -12,7 +12,12 @@ export const types = {
   campaignServerError: "[campaign] server error",
   campaignUploadingImage: "[campaign] upload image to imgur",
   campaignUploadImg: "[campaign] updated image",
+  campaignUploadImgBody: "[campaign] updated image body",
   campaignImgUploadError: "[campign] error uploadin image to imgur",
+  campaignImgBodyUploadError: "[campign] error uploadin image body to imgur",
+  
+  campaignUploadServerError: "[campaign] error uploading to server",
+  campaignUploadServer: "[campaign] uploading to server",
 
   authChecking: "[auth] chaeking state",
   authCheckingFinish: "[auth] chaeking finish state",

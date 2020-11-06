@@ -18,6 +18,7 @@ import {
 import { AddNewFab } from "../ui/AddNewFab";
 import { DelatedCampaignFab } from "../ui/DelatedCampaignFab";
 import { changePage } from "../../actions/auth";
+import { Loading } from "../ui/Loading";
 moment.locale("es");
 const localizer = momentLocalizer(moment);
 
@@ -25,7 +26,7 @@ const localizer = momentLocalizer(moment);
 
 export const CampaignScreen = () => {
   const dispatch = useDispatch();
-  const { campaigns, activeCampaign } = useSelector((state) => state.campaign);
+  const { campaigns, activeCampaign, campaignLoadingToServer } = useSelector((state) => state.campaign);
   const [lastView, setLastView] = useState(
     localStorage.getItem("lastView") || "month"
   );
@@ -64,7 +65,7 @@ export const CampaignScreen = () => {
       <Navbar>
         <div className="calendar-screen">
           <h1>CAmpañas</h1>
-
+          {campaignLoadingToServer ? <Loading /> : false}
           <Calendar
             localizer={localizer}
             events={campaigns}
@@ -83,6 +84,8 @@ export const CampaignScreen = () => {
             view={lastView}
           />
         </div>
+
+        
         <AddNewFab />
         {activeCampaign !== null ? <DelatedCampaignFab /> : false}
 

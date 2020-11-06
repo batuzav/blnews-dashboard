@@ -24,6 +24,9 @@ const initialState = {
   uploadImgImageToImgur: false,
   uploadImgError: false,
   uploadedImgLink: "",
+  uploadedImgeBodyLink: "",
+  campaignLoadingToServer: false,
+  campaignLoadingToServerError: "",
 };
 
 export const campaignReducer = (state = initialState, action) => {
@@ -36,6 +39,7 @@ export const campaignReducer = (state = initialState, action) => {
     case types.campaignAddNew:
       return {
         ...state,
+        campaignAddNew: false, 
         campaigns: [...state.campaigns, action.payload],
       };
     case types.campaignRemoveActive:
@@ -70,16 +74,45 @@ export const campaignReducer = (state = initialState, action) => {
       uploadImgError: false,
       uploadedImgLink: action.payload,
     }
+    case types.campaignUploadImgBody:
+    return {
+      ...state,
+      uploadImgImageToImgur: false,
+      uploadImgError: false,
+      uploadedImgeBodyLink: action.payload,
+    }
     case types.campaignImgUploadError: 
     return {
       ...state,
       uploadImgError: true,
       uploadImgImageToImgur: false,
+      uploadedImgeLink: "",
+
     }
+    case types.campaignImgBodyUploadError: 
+    return {
+      ...state,
+      uploadImgError: true,
+      uploadImgImageBodyToImgur: false,
+      uploadedImgeLink: "",
+
+    }
+    case types.campaignUploadServer:
+    return {
+      ...state,
+      campaignLoadingToServerError: "",
+      campaignLoadingToServer: true
+    }
+    case types.campaignUploadServerError:
+      return{
+        ...state,
+        campaignLoadingToServerError: action.payload,
+        campaignLoadingToServer: false,
+      }
     case types.campaignsGetStart:
       return{
         ...state,
-        getCampaignsIsLoading: false,
+        getCampaignsIsLoading: true,
       };
     case types.campaignServerError:
       return {
@@ -90,6 +123,7 @@ export const campaignReducer = (state = initialState, action) => {
     return {
       ...state,
       getCampaignsIsLoading: false, 
+      campaignLoadingToServer: false,
       campaigns: action.payload,
     }
     default:

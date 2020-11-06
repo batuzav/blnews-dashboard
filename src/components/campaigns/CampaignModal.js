@@ -12,6 +12,8 @@ import {
   campaignRemoveActive,
   campaignUpdated,
   uploadImageToImgur,
+  campaignUpdating,
+  campaignCreating,
 } from "../../actions/campaign";
 import { Avatar } from "@material-ui/core";
 import { makeStyles } from '@material-ui/core/styles';
@@ -50,23 +52,13 @@ const useStyles = makeStyles((theme) => ({
 }));
 const now = moment().minutes(0).seconds(0).add(1, "hours");
 const end = now.clone().add(1, "hours");
-const initForm = {
-  title: "",
-  subtitle: "",
-  country: [],
-  img: "",
-  description: "",
-  imageBody: "",
-  startDate: now.toDate(),
-  endDate: end.toDate(),
-  userCreate: { name: "Pedro" },
-  category: [],
-};
+
 
 Modal.setAppElement("#root");
 export const CampaignModal = () => {
   const { modalOpen } = useSelector((state) => state.ui);
   const { activeCampaign } = useSelector((state) => state.campaign);
+  const { uid } = useSelector((state)=> state.auth);
   const dispatch = useDispatch();
   const [showBodyImgInput, setShowBodyImgInput] = useState(false);
   const [validateForm, setValidateForm] = useState({
@@ -75,6 +67,21 @@ export const CampaignModal = () => {
     descriptionValid: true,
     imgValid: true,
   });
+  const initForm = {
+    title: "",
+    subtitle: "",
+    country: [],
+    img: "",
+    description: "",
+    imageBody: "",
+    startDate: now.toDate(),
+    endDate: end.toDate(),
+    userCreate: { name: "Pedro" },
+    category: [],
+    user: {
+      _id: uid,
+    }
+  };
   const [formValues, setFormValues] = useState(initForm);
   const { startDate, endDate } = formValues;
   const classes = useStyles();
@@ -162,18 +169,25 @@ export const CampaignModal = () => {
     if (formValues.country.length === 0) {
       return Swal.fire("Error", "No has seleccionado ningún país =(", "error");
     }
+    const imgToUpdating = document.querySelector("#imageToUpload").files[0];
+    const imgBodyToUpdating = (!document.querySelector("#imageBodyToUpload")) ? undefined : document.querySelector("#imageBodyToUpload").files[0];
 
     if (activeCampaign) {
       // dispatch(campaignUpdated(formValues));
-      console.log('formValues.img', formValues.img);
-      const imageToUpload = document.querySelector("#imageToUpload").files[0];
-      console.log('imageTpUpload', imageToUpload)
-      dispatch(uploadImageToImgur(imageToUpload));
+      console.log(document.querySelector("#imageBodyToUpload"))
+      
+      dispatch(campaignUpdating({
+        formValues,
+        imgToUpdating, 
+        imgBodyToUpdating
+      }));
     } else {
+      console.log('imgBodyToUpdating MODAL >>>>', imgBodyToUpdating)
       dispatch(
-        campaignAddNew({
-          ...formValues,
-          id: new Date().getTime(),
+        campaignCreating({
+          formValues,
+          imgToUpdating, 
+          imgBodyToUpdating
         })
       );
     }
@@ -332,11 +346,13 @@ export const CampaignModal = () => {
         ) : (
           <div className="form-group ">
             <label>Imagen para el cuerpo de la campaña</label>
+            <Avatar alt="imagen Principal" className={classes.square} src={activeCampaign!==null ? `${activeCampaign.usedimageBody}` : false}/>
             <input
               type="file"
               className="form-control"
               autoComplete="off"
               name="imageBody"
+              id="imageBodyToUpload"
               value={formValues.imageBody}
               onChange={handleChangeInput}
             />

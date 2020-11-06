@@ -37,10 +37,8 @@ export const changePage = (page) => ({
 export const startLogin = ({ email, password }) => {
   return async (dispatch) => {
     dispatch(authChecking());
-    console.log("heyLogin", email, password);
     try {
       const resp = await apiCall(loginQuery({ email, password }));
-      console.log(resp.data.data.login);
       if (resp.data.data.login) {
         const { token, user } = resp.data.data.login;
         localStorage.setItem("token", token);
@@ -52,7 +50,6 @@ export const startLogin = ({ email, password }) => {
       }
     } catch (e) {
       dispatch(authError());
-      console.log("e: >>>", e);
     }
   };
 };
@@ -66,7 +63,6 @@ export const authTokenChecking = () => {
       if (resp.data.data.checkLogin) {
         const { isAuth, user } = resp.data.data.checkLogin;
         if (isAuth) {
-          console.log('HOLA', user)
           dispatch(login(user));
         } else {
           localStorage.removeItem("token");
